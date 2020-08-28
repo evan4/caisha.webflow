@@ -2379,14 +2379,48 @@ function(module, exports, __webpack_require__) {
 
           // Handle form submission for Webflow forms
           $doc.on('submit', namespace + ' form', function(evt) {
+                evt.preventDefault();
               var data = $.data(this, namespace);
-              if (data.handler) {
+              console.log($(this));
+
+              $.ajaxSetup({
+                url: "mail/mail.php",
+                type: "POST",
+                statusCode: {
+                  404: function() {
+                    result(0);
+                  }
+                }
+              });
+
+              $.ajax({
+                data: $(this).serializeArray()
+              }).done(function(data) {
+                if (data === 'success') {
+                  result(1);
+                } else {
+                  result(0);
+                }
+              });
+             /*  if (data.handler) {
                   data.evt = evt;
                   data.handler(data);
-              }
+              } */
           });
-      }
 
+      }
+    function result(res) {
+        const content = $('.w-form-done');
+        const form = $('#email-form')
+        form.hide();
+        $(form)[0].reset();
+        content.show();
+        if (res === 0) {
+          content.text('При отправке данных произошла ошибка. Попробуйте еще раз');
+        } else {
+          content.text('Ваша заявка успешно отправлена');
+        }
+      };
       // Reset data common to all submit handlers
       function reset(data) {
           var btn = data.btn = data.form.find(':input[type="submit"]');
