@@ -2416,9 +2416,9 @@ function(module, exports, __webpack_require__) {
         $(form)[0].reset();
         content.show();
         if (res === 0) {
-          content.text('При отправке данных произошла ошибка. Попробуйте еще раз');
+          content.text('An error occurred when sending data. Try again');
         } else {
-          content.text('Ваша заявка успешно отправлена');
+          content.text('The message has been successfully sent');
         }
       };
       // Reset data common to all submit handlers
